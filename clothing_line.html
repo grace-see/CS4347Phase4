@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Manage Clothing Lines</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header><h1>Manage Clothing Lines</h1><a href="index.html">Home</a></header>
+
+<form action="./api/clothing_line_add.php" method="post">
+<h2>Add a Clothing Line</h2>
+<label for="CL_Name">Line Name</label>
+<input type="text" id="CL_Name" name="CL_Name" maxlength="30" required>
+<label for="Type">Type (e.g. Summer, Christmas, Athletic)</label>
+<input type="text" id="Type" name="Type" maxlength="20">
+<label for="First_Available">First Available</label>
+<input type="date" id="First_Available" name="First_Available" required>
+<label for="Last_Available">Last Available (blank if still sold)</label>
+<input type="date" id="Last_Available" name="Last_Available">
+<label for="On_Sale">Sale Percentage (%)</label>
+<input type="number" id="On_Sale" name="On_Sale" min="0" max="100" step="0.1" value="0" required>
+<label for="Price_Tier">Price Tier</label>
+<select id="Price_Tier" name="Price_Tier">
+<option value="">-- none --</option><option>Economy</option><option>Standard</option><option>Luxury</option>
+</select>
+<label for="Description">Description</label>
+<textarea id="Description" name="Description" maxlength="150" rows="3"></textarea>
+<button type="submit">Add Line</button>
+<button type="reset">Clear</button>
+</form>
+<br>
+<form action="./api/clothing_line_delete.php" method="post">
+<h2>Delete a Clothing Line</h2>
+<label for="del_CL_Name">Line Name</label>
+<input type="text" id="del_CL_Name" name="CL_Name" maxlength="30" required>
+<p class="note">Deleting a line cascades to its C_Line_Contains rows.</p>
+<button type="submit">Delete Line</button>
+</form>
+</body>
+</html>

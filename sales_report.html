@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sales Report</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header><h1>Best &amp; Worst Sellers</h1><a href="index.html">Home</a></header>
+
+<form action="./api/sales_report.php" method="get">
+<label for="order">Show</label>
+<select id="order" name="order">
+<option value="desc">Best-selling items</option>
+<option value="asc">Worst-selling items</option>
+</select>
+<label for="from">From Date</label>
+<input type="date" id="from" name="from">
+<label for="to">To Date</label>
+<input type="date" id="to" name="to">
+<label for="limit">Number of Items</label>
+<input type="number" id="limit" name="limit" min="1" value="10">
+<button type="submit">Run Report</button>
+</form>
+<br>
+<table>
+<thead>
+<tr><th>Rank</th><th>Item No.</th><th>Clothing Line</th><th>Size</th><th>Material</th><th>Price</th><th>Units Sold</th><th>Current Stock</th></tr>
+</thead>
+<tbody>
+<!-- Rows will be filled with query results in Phase 4 -->
+<tr><td colspan="8" class="note">Results will appear here once the database is connected.</td></tr>
+</tbody>
+</table>
+<p class="note">Query: SUM(Sales_Line.Sale_Quantity) grouped by Item_No, joined with Clothing_Item and C_Line_Contains, filtered by Sale.Date, ordered by units sold.</p>
+</body>
+</html>

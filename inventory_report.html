@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Inventory Report</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header><h1>Inventory Report</h1><a href="index.html">Home</a></header>
+
+<form action="inventory_report.php" method="get">
+<label for="status">Status</label>
+<select id="status" name="status">
+<option value="all">All items</option>
+<option value="in">In stock</option>
+<option value="out">Out of stock</option>
+<option value="discontinued">Discontinued</option>
+</select>
+<label for="CL_Name">Clothing Line (optional)</label>
+<input type="text" id="CL_Name" name="CL_Name" maxlength="30">
+<label for="Gender">Gender</label>
+<select id="Gender" name="Gender">
+<option value="">Any</option><option value="M">Male</option><option value="F">Female</option><option value="U">Unisex</option>
+</select>
+<label for="sort">Sort By</label>
+<select id="sort" name="sort">
+<option value="stock_asc">Stock (lowest first)</option>
+<option value="stock_desc">Stock (highest first)</option>
+<option value="price_asc">Price (low to high)</option>
+<option value="price_desc">Price (high to low)</option>
+</select>
+<button type="submit">Run Report</button>
+</form>
+<br>
+<table>
+<thead>
+<tr><th>Item No.</th><th>Clothing Line</th><th>Gender</th><th>Size</th><th>Material</th><th>Price</th><th>Current Stock</th><th>Status</th></tr>
+</thead>
+<tbody>
+<!-- Rows will be filled with query results in Phase 4 -->
+<tr><td colspan="8" class="note">Results will appear here once the database is connected.</td></tr>
+</tbody>
+</table>
+<p class="note">Status: "Out of stock" when Current_Stock = 0; "Discontinued" when the item's Clothing_Line.Last_Available is before today.</p>
+</body>
+</html>

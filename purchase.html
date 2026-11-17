@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Make a Purchase</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header><h1>Make a Purchase</h1><a href="index.html">Home</a></header>
+
+<form action="./api/purchase.php" method="post">
+<fieldset>
+<legend>Your Account</legend>
+<label for="CustomerID">Customer ID</label>
+<input type="number" id="CustomerID" name="CustomerID" min="1" required>
+<p class="note">No account? <a href="customer_signup.html">Sign up</a></p>
+</fieldset>
+
+<fieldset>
+<legend>Items</legend>
+<table>
+<tr><th>Item No.</th><th>Size</th><th>Quantity</th></tr>
+<tr>
+<td><input type="number" name="Item_No[]" min="1" required></td>
+<td><select name="Size[]"><option>XS</option><option>S</option><option selected>M</option><option>L</option><option>XL</option><option>XXL</option></select></td>
+<td><input type="number" name="Sale_Quantity[]" min="1" value="1" required></td>
+</tr>
+<tr>
+<td><input type="number" name="Item_No[]" min="1"></td>
+<td><select name="Size[]"><option>XS</option><option>S</option><option selected>M</option><option>L</option><option>XL</option><option>XXL</option></select></td>
+<td><input type="number" name="Sale_Quantity[]" min="1"></td>
+</tr>
+<tr>
+<td><input type="number" name="Item_No[]" min="1"></td>
+<td><select name="Size[]"><option>XS</option><option>S</option><option selected>M</option><option>L</option><option>XL</option><option>XXL</option></select></td>
+<td><input type="number" name="Sale_Quantity[]" min="1"></td>
+</tr>
+</table>
+<p class="note">On submit, a Sale row is created with today's date, the total Cost is calculated (applying Clothing_Line.On_Sale discounts), and Current_Stock is reduced.</p>
+</fieldset>
+
+<button type="submit">Place Order</button>
+<button type="reset">Clear</button>
+</form>
+</body>
+</html>

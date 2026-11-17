@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Comet Apparel</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header><h1>Comet Apparel</h1>Group 5 &mdash; CS 4347.007 Phase 3, Task B</header>
+
+<div class="card">
+<h2>Interface Files</h2>
+<table>
+<tr><th>File</th><th>Purpose</th><th>Relations used</th></tr>
+<tr><td><a href="sale_entry.html">sale_entry.html</a></td><td>Store-side form to record a sale and deduct sold items from stock</td><td>Sale, Sales_Line, Clothing_Item</td></tr>
+<tr><td><a href="purchase.html">purchase.html</a></td><td>Customer-side purchase form</td><td>Sale, Sales_Line, Clothing_Item</td></tr>
+<tr><td><a href="customer_signup.html">customer_signup.html</a></td><td>New customer signup</td><td>Customer</td></tr>
+<tr><td><a href="clothing_item.html">clothing_item.html</a></td><td>Add or delete a clothing item</td><td>Clothing_Item, C_Line_Contains</td></tr>
+<tr><td><a href="clothing_line.html">clothing_line.html</a></td><td>Add or delete a clothing line</td><td>Clothing_Line</td></tr>
+<tr><td><a href="restock.html">restock.html</a></td><td>Record a shipment received (increase stock)</td><td>Clothing_Item</td></tr>
+<tr><td><a href="sales_report.html">sales_report.html</a></td><td>Query results: best- and worst-selling items</td><td>Sales_Line, Clothing_Item, C_Line_Contains</td></tr>
+<tr><td><a href="inventory_report.html">inventory_report.html</a></td><td>Query results: inventory, filterable and sortable</td><td>Clothing_Item, C_Line_Contains, Clothing_Line</td></tr>
+<tr><td>style.css</td><td>Shared styling</td><td>&mdash;</td></tr>
+</table>
+<p class="note">Forms post to PHP scripts that will be written in Phase 4. Database connectivity is not implemented yet.</p>
+</div>
+</body>
+</html>
