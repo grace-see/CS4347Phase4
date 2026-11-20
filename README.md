@@ -11,11 +11,9 @@ php -S localhost:8000
 ## To-Do
 
 - Add code to the following PHP scripts:
-  - `inventory_report.php`
   - `purchase.php`
   - `restock.php`
   - `sale_entry.php`
   - `sales_report.php`
 - Input validation & error handling for all forms
-- Assignment 5 - SQL injection experiment
 - Update front-end UI styling (optional)
