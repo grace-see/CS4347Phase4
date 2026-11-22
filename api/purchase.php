@@ -9,6 +9,8 @@
     date_default_timezone_set('America/Los_Angeles');
     $date = date('Y-m-d', time());
 
+    $message = "ok";
+
     $conn = new mysqli("localhost", "root", "pass", "comet_apparel");
 
     if (!$conn) {
@@ -41,7 +43,7 @@
                 $stmt->fetch();
                 $total_cost += ($item_price * $all_qty[$i]);
             } else {
-                echo "Parameter binding failed.";
+                $message = "Issue processing order.";
             }
             $stmt->close();
         }
@@ -51,7 +53,7 @@
         if ($stmt->bind_param("iisi", $transaction, $customer, $date, $total_cost)) {
             $stmt->execute();
         } else {
-            echo "Parameter binding failed.";
+            $message = "Issue processing order.";
         }
         $stmt->close();
     }
@@ -61,7 +63,7 @@
             if ($stmt->bind_param("iii", $transaction, $item_no[$i], $qty[$i])) {
                 $stmt->execute();
             } else {
-                echo "Parameter binding failed.";
+                $message = "Issue processing order.";
             }
         }
         $stmt->close();
@@ -72,12 +74,16 @@
             if ($stmt->bind_param("ii", $qty[$i], $item_no[$i])) {
                 $stmt->execute();
             } else {
-                echo "Parameter binding failed.";
+                $message = "Issue processing order.";
             }
         }
         $stmt->close();
     }
 
     $conn->close();
+
+    header('Content-Type: application/json; charset=utf-8');
+    $res = array("message" => $message);
+    echo json_encode($res);
 
 ?>

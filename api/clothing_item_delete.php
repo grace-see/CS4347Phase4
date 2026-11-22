@@ -2,6 +2,8 @@
 
     $item_no = $_POST['Item_No'];
 
+    $message = "ok";
+
     $conn = new mysqli("localhost", "root", "pass", "comet_apparel");
 
     if (!$conn) {
@@ -17,10 +19,14 @@
         if ($stmt->bind_param("si", $cl_name, $item_no)) {
             $stmt->execute();
         } else {
-            echo "Parameter binding failed.";
+            $message = "Issue with deleting clothing item.";
         }
         $stmt->close();
     }
 
     $conn->close();
+
+    header('Content-Type: application/json; charset=utf-8');
+    $res = array("message" => $message);
+    echo json_encode($res);
 ?>

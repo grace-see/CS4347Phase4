@@ -5,11 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Enter a Sale</title>
 <link rel="stylesheet" href="style.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
 <body>
 <header><h1>Enter a Sale</h1><a href="index.html">Home</a></header>
 
 <form action="./api/sale_entry.php" method="post">
+<div id="success-message" class="hidden"></div>
+<div id="error-message" class="hidden"></div>
 <fieldset>
 <legend>Sale</legend>
 <label for="TransactionID">Transaction ID</label>
@@ -37,5 +40,31 @@
 <button type="submit">Record Sale</button>
 <button type="reset">Clear</button>
 </form>
+<script type="text/javascript">
+    $('document').ready(function() {
+        $('#purchaseForm').submit(function(e) {
+            e.preventDefault();
+            var FormData = $('#purchaseForm').serialize();
+            $.ajax({
+                type: 'post',
+                url: './api/purchase.php',
+                data: FormData,
+                dataType: 'json',
+                encode: true,
+                success: function(res) {
+                    console.log(res);
+                    if (res.message == "ok"){
+                        $('#success-message').removeClass("hidden");
+                        $('#success-message').html("Sale processed successfully.");
+                    } else{
+                        $('#error-message').removeClass("hidden");
+                        $('#error-message').html(res.message);
+                    }
+                }
+            })
+            $(this)[0].reset(); // clear data from form after submit
+        })
+    })
+</script>
 </body>
 </html>

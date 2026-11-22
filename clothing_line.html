@@ -5,12 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Manage Clothing Lines</title>
 <link rel="stylesheet" href="style.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
 <body>
 <header><h1>Manage Clothing Lines</h1><a href="index.html">Home</a></header>
 
-<form action="./api/clothing_line_add.php" method="post">
+<form id="addCLForm" action="clothing_line_add" method="post">
 <h2>Add a Clothing Line</h2>
+<div id="success-message-add" class="hidden"></div>
+<div id="error-message-add" class="hidden"></div>
 <label for="CL_Name">Line Name</label>
 <input type="text" id="CL_Name" name="CL_Name" maxlength="30" required>
 <label for="Type">Type (e.g. Summer, Christmas, Athletic)</label>
@@ -31,12 +34,62 @@
 <button type="reset">Clear</button>
 </form>
 <br>
-<form action="./api/clothing_line_delete.php" method="post">
+<form id="deleteCLForm" action="clothing_line_delete" method="post">
 <h2>Delete a Clothing Line</h2>
+<div id="success-message-delete" class="hidden"></div>
+<div id="error-message-delete" class="hidden"></div>
 <label for="del_CL_Name">Line Name</label>
 <input type="text" id="del_CL_Name" name="CL_Name" maxlength="30" required>
 <p class="note">Deleting a line cascades to its C_Line_Contains rows.</p>
 <button type="submit">Delete Line</button>
 </form>
+<script type="text/javascript">
+    $('document').ready(function() {
+        $('#addCLForm').submit(function(e) {
+            e.preventDefault();
+            var FormData = $('#addCLForm').serialize();
+            $.ajax({
+                type: 'post',
+                url: './api/clothing_line_add.php',
+                data: FormData,
+                dataType: 'json',
+                encode: true,
+                success: function(res) {
+                    console.log(res);
+                    if (res.message == "ok"){
+                        $('#success-message-add').removeClass("hidden");
+                        $('#success-message-add').html("Clothing line successfully added.");
+                    } else{
+                        $('#erro-message-add').removeClass("hidden");
+                        $('#error-message-add').html(res.message);
+                    }
+                }
+            })
+            $(this)[0].reset(); // clear data from form after submit
+        })
+        $('#deleteCLForm').submit(function(e) {
+            e.preventDefault();
+            var FormData = $('#deleteCLForm').serialize();
+            $.ajax({
+                type: 'post',
+                url: './api/clothing_line_delete.php',
+                data: FormData,
+                dataType: 'json',
+                encode: true,
+                success: function(res) {
+                    console.log(res);
+                    if (res.message == "ok"){
+                        $('#success-message-delete').removeClass("hidden");
+                        $('#success-message-delete').html("Clothing line successfully deleted.");
+                    } else{
+                        $('#error-message-delete').removeClass("hidden");
+                        $('#error-message-delete').html(res.message);
+                    }
+                }
+            })
+            $(this)[0].reset(); // clear data from form after submit
+        })
+    })
+</script>
 </body>
 </html>

@@ -3,6 +3,8 @@
     $item_no = $_POST['Item_No'];
     $qty = $_POST['Quantity'];
 
+    $message = "ok";
+
     $conn = new mysqli("localhost", "root", "pass", "comet_apparel");
 
     if (!$conn) {
@@ -18,7 +20,7 @@
         if ($stmt->bind_param("ii", $qty, $item_no)) {
             $stmt->execute();
         } else {
-            echo "Parameter binding failed.";
+            $message = "Issue updating item quantity.";
         }
         $stmt->close();
     }

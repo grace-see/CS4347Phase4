@@ -5,11 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Make a Purchase</title>
 <link rel="stylesheet" href="style.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
 <body>
 <header><h1>Make a Purchase</h1><a href="index.html">Home</a></header>
 
-<form action="./api/purchase.php" method="post">
+<form id="purchaseForm" action="purchase" method="post">
+<div id="success-message" class="hidden"></div>
+<div id="error-message" class="hidden"></div>
 <fieldset>
 <legend>Your Account</legend>
 <label for="CustomerID">Customer ID</label>
@@ -36,9 +39,34 @@
 </table>
 <p class="note">On submit, a Sale row is created with today's date, the total Cost is calculated (applying Clothing_Line.On_Sale discounts), and Current_Stock is reduced.</p>
 </fieldset>
-
 <button type="submit">Place Order</button>
 <button type="reset">Clear</button>
 </form>
+<script type="text/javascript">
+    $('document').ready(function() {
+        $('#purchaseForm').submit(function(e) {
+            e.preventDefault();
+            var FormData = $('#purchaseForm').serialize();
+            $.ajax({
+                type: 'post',
+                url: './api/purchase.php',
+                data: FormData,
+                dataType: 'json',
+                encode: true,
+                success: function(res) {
+                    console.log(res);
+                    if (res.message == "ok"){
+                        $('#success-message').removeClass("hidden");
+                        $('#success-message').html("Purchase processed successfully.");
+                    } else{
+                        $('#error-message').removeClass("hidden");
+                        $('#error-message').html(res.message);
+                    }
+                }
+            })
+            $(this)[0].reset(); // clear data from form after submit
+        })
+    })
+</script>
 </body>
 </html>

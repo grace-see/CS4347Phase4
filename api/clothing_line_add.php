@@ -8,6 +8,8 @@
     $price_tier = $_POST['Price_Tier'];
     $description = $_POST['Description'];
 
+    $message = "ok";
+
     $conn = new mysqli("localhost", "root", "pass", "comet_apparel");
 
     if (!$conn) {
@@ -22,10 +24,14 @@
         if ($stmt->bind_param("ssssdss", $cl_name, $type, $first_available, $last_available, $sale, $price_tier, $description)) {
             $stmt->execute();
         } else {
-            echo "Parameter binding failed.";
+            $message = "Issue with adding clothing line.";
         }
         $stmt->close();
     }
 
     $conn->close();
+
+    header('Content-Type: application/json; charset=utf-8');
+    $res = array("message" => $message);
+    echo json_encode($res);
 ?>

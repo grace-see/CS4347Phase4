@@ -8,6 +8,8 @@
     $price = $_POST['Price'];
     $curr_stock = $_POST['Current_Stock'];
 
+    $message = "ok";
+
     $conn = new mysqli("localhost", "root", "pass", "comet_apparel");
 
     if (!$conn) {
@@ -22,7 +24,7 @@
         if ($stmt->bind_param("isssdi", $item_no, $gender, $material, $price, $curr_stock)) {
             $stmt->execute();
         } else {
-            echo "Parameter binding failed.";
+            $message = "Issue with adding clothing item.";
         }
         $stmt->close();
     }
@@ -34,10 +36,14 @@
         if ($stmt->bind_param("si", $cl_name, $item_no)) {
             $stmt->execute();
         } else {
-            echo "Parameter binding failed.";
+            $message = "Issue with adding clothing item.";
         }
         $stmt->close();
     }
 
     $conn->close();
+
+    header('Content-Type: application/json; charset=utf-8');
+    $res = array("message" => $message);
+    echo json_encode($res);
 ?>

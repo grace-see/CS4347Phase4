@@ -6,6 +6,8 @@
     $dob = $_POST['DOB'];
     $email = $_POST['Email'];
 
+    $message = "ok";
+
     $conn = new mysqli("localhost", "root", "pass", "comet_apparel");
 
     if (!$conn) {
@@ -20,10 +22,15 @@
         if ($stmt->bind_param("sssss", $phone_no, $f_name, $l_name, $dob, $email)) {
             $stmt->execute();
         } else {
-            echo "Parameter binding failed.";
+            $message = "Issue with customer signup.";
         }
         $stmt->close();
     }
 
     $conn->close();
+
+    header('Content-Type: application/json; charset=utf-8');
+    $res = array("message" => $message);
+    echo json_encode($res);
+
 ?>

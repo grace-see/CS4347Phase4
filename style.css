@@ -13,3 +13,6 @@ table { width: 100%; border-collapse: collapse; padding: 0; }
 th, td { border: 1px solid #ccc; padding: 6px 8px; text-align: left; }
 th { background: #154734; color: #fff; }
 .note { font-size: 13px; color: #555; font-style: italic; }
+#success-message, #success-message-add, #success-message-delete { background: oklch(92.5% 0.084 155.995); color: oklch(39.3% 0.095 152.535); border-radius: 8px; padding: 16px; }
+#error-message, #error-message-add, #error-message-delete { background: oklch(88.5% 0.062 18.334); color: oklch(39.6% 0.141 25.723); border-radius: 8px; padding: 16px; }
+.hidden { display: none; }
