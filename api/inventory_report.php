@@ -65,11 +65,8 @@
 
     $result = $conn->query($sql);
 
-    //echo "status " .$status. "name " .$cl_name. "gender " .$gender. "sort " .$sort. " ";
-
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
-            // need to compute based on Clothing_Line.LastAvailable and Current_Stock
             $current_status = "In Stock"; 
             if (!is_null($row['Last_Available'])) {
                 //update logic to also include specify that date should be earlier than today
