@@ -5,11 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Sales Report</title>
 <link rel="stylesheet" href="style.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
 <body>
 <header><h1>Best &amp; Worst Sellers</h1><a href="index.html">Home</a></header>
 
-<form action="./api/sales_report.php" method="get">
+<form id="salesReport" action="sales_report" method="get">
 <label for="order">Show</label>
 <select id="order" name="order">
 <option value="desc">Best-selling items</option>
@@ -26,13 +27,60 @@
 <br>
 <table>
 <thead>
-<tr><th>Rank</th><th>Item No.</th><th>Clothing Line</th><th>Size</th><th>Material</th><th>Price</th><th>Units Sold</th><th>Current Stock</th></tr>
+<tr><th>Rank</th><th>Item No.</th><th>Size</th><th>Material</th><th>Price</th><th>Units Sold</th><th>Current Stock</th></tr>
 </thead>
-<tbody>
+<tbody id="results">
 <!-- Rows will be filled with query results in Phase 4 -->
-<tr><td colspan="8" class="note">Results will appear here once the database is connected.</td></tr>
 </tbody>
 </table>
 <p class="note">Query: SUM(Sales_Line.Sale_Quantity) grouped by Item_No, joined with Clothing_Item and C_Line_Contains, filtered by Sale.Date, ordered by units sold.</p>
+<script type="text/javascript">
+    $('document').ready(function() {
+        $('#salesReport').submit(function(e) {
+            e.preventDefault();
+            var FormData = $('#salesReport').serialize();
+            $.ajax({
+                type: 'get',
+                url: './api/sales_report.php',
+                data: FormData,
+                dataType: 'json',
+                encode: true,
+                success: function(res) {
+                    console.log(res);
+                    if (res.message == "ok"){
+                        for (const row of res.data) {
+                            table_row = document.createElement("tr");
+                            rank = document.createElement("td");
+                            rank.textContent = row.Rank;
+                            table_row.append(rank);
+                            item_no = document.createElement("td");
+                            item_no.textContent = row.Item_No;
+                            table_row.append(item_no);
+                            size = document.createElement("td");
+                            size.textContent = row.Size;
+                            table_row.append(size);
+                            material = document.createElement("td");
+                            material.textContent = row.Material;
+                            table_row.append(material);
+                            price = document.createElement("td");
+                            price.textContent = row.Price;
+                            table_row.append(price);
+                            units_sold = document.createElement("td");
+                            units_sold.textContent = row.Units_Sold;
+                            table_row.append(units_sold);
+                            stock = document.createElement("td");
+                            stock.textContent = row.Current_Stock;
+                            table_row.append(stock);
+
+                            $('#results').append(table_row);
+                        }
+                    } else{
+                        $('#results').html(res.message);
+                    }
+                }
+            })
+        })
+    })
+</script>
 </body>
 </html>

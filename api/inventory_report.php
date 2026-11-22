@@ -88,12 +88,9 @@
                 "Current_Status" => $current_status
             ));
         }
-        //echo $domDocument->saveHTML();
-        //header("location: inventory_report.html");
         $message = "ok";
     }
     else {
-        //echo "No results found.";
         $message = "No results found.";
     }
 

@@ -25,6 +25,10 @@
     
     $insert_sales_line = "INSERT INTO Sales_Line
                           VALUES (?, ?, ?)"; //item_no, transactionID, qty
+    
+    $deduct_item_qty = "UPDATE Clothing_Item
+                        SET Current_Stock = Current_Stock - ?
+                        WHERE Item_No=?";
 
     /***** CALCULATE TOTAL COST OF SALE *****/
 
@@ -55,6 +59,17 @@
     if ($stmt = $conn->prepare($insert_sales_line)) {
         for ($i = 0; $i < $size; $i++) {
             if ($stmt->bind_param("iii", $transaction, $item_no[$i], $qty[$i])) {
+                $stmt->execute();
+            } else {
+                echo "Parameter binding failed.";
+            }
+        }
+        $stmt->close();
+    }
+
+    if ($stmt = $conn->prepare($deduct_item_qty)) {
+        for ($i = 0; $i < $size; $i++) {
+            if ($stmt->bind_param("ii", $qty[$i], $item_no[$i])) {
                 $stmt->execute();
             } else {
                 echo "Parameter binding failed.";
