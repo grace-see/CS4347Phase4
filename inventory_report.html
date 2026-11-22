@@ -5,11 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Inventory Report</title>
 <link rel="stylesheet" href="style.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
 <body>
 <header><h1>Inventory Report</h1><a href="index.html">Home</a></header>
 
-<form action="./api/inventory_report.php" method="get">
+<form id="inventoryReport" action="inventory_report" method="get">
 <label for="status">Status</label>
 <select id="status" name="status">
 <option value="all">All items</option>
@@ -30,18 +31,69 @@
 <option value="price_asc">Price (low to high)</option>
 <option value="price_desc">Price (high to low)</option>
 </select>
-<button type="submit">Run Report</button>
+<button type="submit" id="submit-btn">Run Report</button>
 </form>
 <br>
 <table>
 <thead>
 <tr><th>Item No.</th><th>Clothing Line</th><th>Gender</th><th>Size</th><th>Material</th><th>Price</th><th>Current Stock</th><th>Status</th></tr>
 </thead>
-<tbody>
+<tbody id="results">
 <!-- Rows will be filled with query results in Phase 4 -->
-<tr><td colspan="8" class="note">Results will appear here once the database is connected.</td></tr>
 </tbody>
 </table>
 <p class="note">Status: "Out of stock" when Current_Stock = 0; "Discontinued" when the item's Clothing_Line.Last_Available is before today.</p>
+<script type="text/javascript">
+    $('document').ready(function() {
+        $('#inventoryReport').submit(function(e) {
+            e.preventDefault();
+            var FormData = $('#inventoryReport').serialize();
+            $.ajax({
+                type: 'get',
+                url: './api/inventory_report.php',
+                data: FormData,
+                dataType: 'json',
+                encode: true,
+                success: function(res) {
+                    console.log(res);
+                    if (res.message == "ok"){
+                        //$('#results').html('Search has been sent successfully.');
+                        for (const row of res.data) {
+                            table_row = document.createElement("tr")
+                            item_no = document.createElement("td");
+                            item_no.textContent = row.Item_No;
+                            table_row.append(item_no);
+                            cl = document.createElement("td");
+                            cl.textContent = row.CL_Name;
+                            table_row.append(cl);
+                            gender = document.createElement("td");
+                            gender.textContent = row.Gender;
+                            table_row.append(gender);
+                            size = document.createElement("td");
+                            size.textContent = row.Size;
+                            table_row.append(size);
+                            material = document.createElement("td");
+                            material.textContent = row.Material;
+                            table_row.append(material);
+                            price = document.createElement("td");
+                            price.textContent = row.Price;
+                            table_row.append(price);
+                            stock = document.createElement("td");
+                            stock.textContent = row.Current_Stock;
+                            table_row.append(stock);
+                            curr_status = document.createElement("td");
+                            curr_status.textContent = row.Current_Status;
+                            table_row.append(curr_status);
+
+                            $('#results').append(table_row);
+                        }
+                    } else{
+                        $('#results').html(res.message);
+                    }
+                }
+            })
+        })
+    })
+</script>
 </body>
 </html>
