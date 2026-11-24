@@ -10,7 +10,7 @@
 <body>
 <header><h1>Manage Clothing Lines</h1><a href="index.html">Home</a></header>
 
-<form id="addCLForm" action="clothing_line_add" method="post">
+<form id="addCLForm" method="post">
 <h2>Add a Clothing Line</h2>
 <div id="success-message-add" class="hidden"></div>
 <div id="error-message-add" class="hidden"></div>
@@ -34,7 +34,7 @@
 <button type="reset">Clear</button>
 </form>
 <br>
-<form id="deleteCLForm" action="clothing_line_delete" method="post">
+<form id="deleteCLForm" method="post">
 <h2>Delete a Clothing Line</h2>
 <div id="success-message-delete" class="hidden"></div>
 <div id="error-message-delete" class="hidden"></div>
@@ -59,13 +59,13 @@
                     if (res.message == "ok"){
                         $('#success-message-add').removeClass("hidden");
                         $('#success-message-add').html("Clothing line successfully added.");
+                        $(this)[0].reset(); // clear data from form after successful submit
                     } else{
                         $('#erro-message-add').removeClass("hidden");
                         $('#error-message-add').html(res.message);
                     }
                 }
             })
-            $(this)[0].reset(); // clear data from form after submit
         })
         $('#deleteCLForm').submit(function(e) {
             e.preventDefault();
@@ -81,13 +81,13 @@
                     if (res.message == "ok"){
                         $('#success-message-delete').removeClass("hidden");
                         $('#success-message-delete').html("Clothing line successfully deleted.");
+                        $(this)[0].reset(); // clear data from form after successful submit
                     } else{
                         $('#error-message-delete').removeClass("hidden");
                         $('#error-message-delete').html(res.message);
                     }
                 }
             })
-            $(this)[0].reset(); // clear data from form after submit
         })
     })
 </script>

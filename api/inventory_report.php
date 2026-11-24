@@ -69,7 +69,7 @@
         while ($row = $result->fetch_assoc()) {
             $current_status = "In Stock"; 
             if (!is_null($row['Last_Available'])) {
-                //update logic to also include specify that date should be earlier than today
+                //update logic to also include specify that date should be earlier than today ??
                 $current_status = "Discontinued";
             } else if ($row['Current_Stock'] == 0) {
                 $current_status = "Out of Stock";

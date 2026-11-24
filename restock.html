@@ -10,7 +10,7 @@
 <body>
 <header><h1>Receive Shipment</h1><a href="index.html">Home</a></header>
 
-<form id="restockForm" action="restock" method="post">
+<form id="restockForm" method="post">
 <div id="success-message" class="hidden"></div>
 <div id="error-message" class="hidden"></div>
 <label for="Item_No">Item No.</label>
@@ -37,13 +37,13 @@
                     if (res.message == "ok"){
                         $('#success-message').removeClass("hidden");
                         $('#success-message').html("Item quantity updated.");
+                        $(this)[0].reset(); // clear data from form after submit
                     } else{
                         $('#error-message').removeClass("hidden");
                         $('#error-message').html(res.message);
                     }
                 }
             })
-            $(this)[0].reset(); // clear data from form after submit
         })
     })
 </script>

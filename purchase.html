@@ -10,7 +10,7 @@
 <body>
 <header><h1>Make a Purchase</h1><a href="index.html">Home</a></header>
 
-<form id="purchaseForm" action="purchase" method="post">
+<form id="purchaseForm" method="post">
 <div id="success-message" class="hidden"></div>
 <div id="error-message" class="hidden"></div>
 <fieldset>
@@ -58,13 +58,13 @@
                     if (res.message == "ok"){
                         $('#success-message').removeClass("hidden");
                         $('#success-message').html("Purchase processed successfully.");
+                        $(this)[0].reset(); // clear data from form after successful submit
                     } else{
                         $('#error-message').removeClass("hidden");
                         $('#error-message').html(res.message);
                     }
                 }
             })
-            $(this)[0].reset(); // clear data from form after submit
         })
     })
 </script>
