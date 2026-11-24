@@ -31,7 +31,7 @@ CREATE TABLE Customer (
 );
 
 CREATE TABLE Sale (
-    TransactionID INT PRIMARY KEY,
+    TransactionID INT AUTO_INCREMENT PRIMARY KEY,
     CustomerID INT,
     Date DATETIME NOT NULL,
     Cost FLOAT NOT NULL DEFAULT 0,
