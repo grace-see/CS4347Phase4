@@ -27,38 +27,38 @@
         $sortBy = "Current_Stock DESC";
     }
 
-    $name_empty = false;
+    $name_empty = 0;
     if (empty($cl_name)) {
-        $name_empty = true;
+        $name_empty = 1;
     }
 
-    $gender_empty = false;
-    if ($gender = "") {
-        $gender_empty = true;
+    $gender_empty = 0;
+    if (empty($gender)) {
+        $gender_empty = 1;
     }   
 
-    if ($status = "all") {
+    if ($status == "all") {
         $sql = "SELECT Item_No, Size, Material, Gender, Current_Stock, Price, CL_Name, Last_Available
                 FROM (Clothing_Line NATURAL JOIN C_Line_Contains AS t1) NATURAL JOIN Clothing_Item
-                WHERE (gender = '".$gender."' OR 1) AND (Cl_Name = '".$cl_name."' OR ($name_empty))
+                WHERE (gender = '".$gender."' OR ($gender_empty)) AND (Cl_Name LIKE '".$cl_name."' OR ($name_empty))
                 ORDER BY ".$sortBy."";
     }
-    else if ($status = "in") {
+    else if ($status == "in") {
         $sql = "SELECT Item_No, Size, Material, Gender, Current_Stock, Price, CL_Name, Last_Available
-                FROM (Clothing_Line NATURAL JOIN C_Line_Contains) AS t1 NATURAL JOIN Clothing_Item
-                WHERE gender = '".$gender."' AND (Cl_Name = '".$cl_name."' OR (empty($cl_name)) AND Current_Stock > 0
+                FROM (Clothing_Line NATURAL JOIN C_Line_Contains AS t1) NATURAL JOIN Clothing_Item
+                WHERE (gender = '".$gender."' OR ($gender_empty)) AND (Cl_Name LIKE '".$cl_name."' OR ($name_empty)) AND (Current_Stock > 0)
                 ORDER BY ".$sortBy."";
     }
-    else if ($status = "out") {
+    else if ($status == "out") {
         $sql = "SELECT Item_No, Size, Material, Gender, Current_Stock, Price, CL_Name, Last_Available
-                FROM (Clothing_Line NATURAL JOIN C_Line_Contains) AS t1 NATURAL JOIN Clothing_Item
-                WHERE gender = '".$gender."' AND (Cl_Name = '".$cl_name."' OR (empty($cl_name)) AND Current_Stock = 0
+                FROM (Clothing_Line NATURAL JOIN C_Line_Contains AS t1) NATURAL JOIN Clothing_Item
+                WHERE (gender = '".$gender."' OR ($gender_empty)) AND (Cl_Name LIKE '".$cl_name."' OR ($name_empty)) AND (Current_Stock = 0)
                 ORDER BY ".$sortBy."";
     }
-    else if ($status = "discontinued") {
+    else if ($status == "discontinued") {
         $sql = "SELECT Item_No, Size, Material, Gender, Current_Stock, Price, CL_Name, Last_Available
-                FROM (Clothing_Line NATURAL JOIN C_Line_Contains) AS t1 NATURAL JOIN Clothing_Item
-                WHERE (gender = '".$gender."' OR 1) AND (Cl_Name = '".$cl_name."' OR ($name_empty)) AND Last_Available IS NOT NULL
+                FROM (Clothing_Line NATURAL JOIN C_Line_Contains AS t1) NATURAL JOIN Clothing_Item
+                WHERE (gender = '".$gender."' OR ($gender_empty)) AND (Cl_Name LIKE '".$cl_name."' OR ($name_empty)) AND (Last_Available IS NOT NULL)
                 ORDER BY ".$sortBy. "";
     }
 
