@@ -1,5 +1,7 @@
 <?php
 
+    require_once 'exit_with_error_func.php';
+
     $transaction = $_POST['TransactionID']; //note: optional, transactionID should be auto_increment
     $customer = is_null($_POST['CustomerID']) ? null : $_POST['CustomerID']; //can be null
     $date = $_POST['Date'];
@@ -18,6 +20,24 @@
     if (!$conn) {
         die("Connection failed: "
             . mysqli_connect_error());
+    }
+
+    $duplicate_transaction = "SELECT * FROM sale WHERE TransactionID=? LIMIT 1";
+
+    if ($stmt = $conn->prepare($duplicate_transaction)) {
+        if ($stmt->bind_param("i", $transaction)) {
+            $stmt->execute();
+            $stmt->store_result();
+            $transaction_exists = $stmt->num_rows;
+            if ($transaction_exists > 0) {
+                $conn->close();
+                exit_with_error("A sale with this transaction ID already exists.");
+            }
+        } else {
+            $conn->close();
+            exit_with_error("Issue with adding clothing item.");
+        }
+        $stmt->close();
     }
 
     $check_item_exists = "SELECT * FROM Clothing_Item WHERE Item_No=? LIMIT 1";
@@ -44,8 +64,10 @@
                 $stmt->execute();
                 $stmt->store_result();
                 $item_exists = $stmt->num_rows;
-                if (!($item_exists > 0))
-                    break;
+                if (!($item_exists > 0)) {
+                    $conn->close();
+                    exit_with_error("One or more items listed do not exist.");
+                }
             }
         }
     }

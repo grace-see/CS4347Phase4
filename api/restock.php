@@ -1,5 +1,7 @@
 <?php
 
+    require_once 'exit_with_error_func.php';
+
     $item_no = $_POST['Item_No'];
     $qty = $_POST['Quantity'];
 
@@ -20,31 +22,27 @@
             SET Current_Stock = Current_Stock + ?
             WHERE Item_No=?";
 
-    for ($i = 0; $i < $size; $i++) {
-        if ($all_item_no[$i] == "")
-            break;
-        if ($stmt = $conn->prepare($check_item_exists)) {
-            if ($stmt->bind_param("i", $all_item_no[$i])) {
-                $stmt->execute();
-                $stmt->store_result();
-                $item_exists = $stmt->num_rows;
-                if (!($item_exists > 0))
-                    break;
+
+    if ($stmt = $conn->prepare($check_item_exists)) {
+        if ($stmt->bind_param("i", $item_no)) {
+            $stmt->execute();
+            $stmt->store_result();
+            $item_exists = $stmt->num_rows;
+            if (!($item_exists > 0)) {
+                $conn->close();
+                exit_with_error("Item does not exist.");
             }
         }
     }
 
-    if ($item_exists > 0) {
-        if ($stmt = $conn->prepare($sql)) {
-            if ($stmt->bind_param("ii", $qty, $item_no)) {
-                $stmt->execute();
-            } else {
-                $message = "Issue updating item quantity.";
-            }
-            $stmt->close();
+    if ($stmt = $conn->prepare($sql)) {
+        if ($stmt->bind_param("ii", $qty, $item_no)) {
+            $stmt->execute();
+        } else {
+            $conn->close();
+            exit_with_error("Issue updating item quantity");
         }
-    } else {
-        $message = "Item does not exist";
+        $stmt->close();
     }
 
     $conn->close();

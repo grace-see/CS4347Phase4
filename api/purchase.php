@@ -1,5 +1,7 @@
 <?php
 
+    require_once 'exit_with_error_func.php';
+
     $customer = $_POST['CustomerID'];
     $all_item_no = $_POST['Item_No'];
     $all_qty = $_POST['Sale_Quantity'];
@@ -46,36 +48,39 @@
                 $stmt->execute();
                 $stmt->store_result();
                 $item_exists = $stmt->num_rows;
-                if (!($item_exists > 0))
-                    break;
+                if (!($item_exists > 0)) {
+                    $conn->close();
+                    exit_with_error("One or more items listed do not exist.");
+                }
             }
         }
     }
 
-    if ($item_exists > 0) {
-        /***** CALCULATE TOTAL COST OF SALE *****/
-        $total_cost = 0;
+    /***** CALCULATE TOTAL COST OF SALE *****/
+    $total_cost = 0;
 
-        for ($i = 0; $i < $size; $i++) {
-            if ($stmt = $conn->prepare($get_item_cost)) {
-                if ($stmt->bind_param("i", $all_item_no[$i])) {
-                    $stmt->execute();
-                    $stmt->store_result();
-                    $stmt->bind_result($item_price);
-                    $stmt->fetch();
-                    $total_cost += ($item_price * floatval($all_qty[$i]));
-                } else {
-                    $message = "Issue processing order.";
-                }
-                $stmt->close();
+    for ($i = 0; $i < $size; $i++) {
+        if ($stmt = $conn->prepare($get_item_cost)) {
+            if ($stmt->bind_param("i", $all_item_no[$i])) {
+                $stmt->execute();
+                $stmt->store_result();
+                $stmt->bind_result($item_price);
+                $stmt->fetch();
+                $total_cost += ($item_price * floatval($all_qty[$i]));
+            } else {
+                $conn->close();
+                exit_with_error("Issue processing order.");
             }
+            $stmt->close();
         }
+    }
         
         if ($stmt = $conn->prepare($insert_sale)) {
             if ($stmt->bind_param("isi", $customer, $date, $total_cost)) {
                 $stmt->execute();
             } else {
-                $message = "Issue processing order.";
+                $conn->close();
+                exit_with_error("Issue processing order.");
             }
             $stmt->close();
         }
@@ -90,7 +95,8 @@
                 if ($stmt->bind_param("iii", $transaction, $all_item_no[$i], $all_qty[$i])) {
                     $stmt->execute();
                 } else {
-                    $message = "Issue processing order.";
+                    $conn->close();
+                    exit_with_error("Issue processing order.");
                 }
             }
             $stmt->close();
@@ -101,14 +107,12 @@
                 if ($stmt->bind_param("ii", $all_qty[$i], $all_item_no[$i])) {
                     $stmt->execute();
                 } else {
-                    $message = "Issue processing order.";
+                    $conn->close();
+                    exit_with_error("Issue processing order.");
                 }
             }
             $stmt->close();
         }
-    } else {
-        $message = "One or more items listed do not exist.";
-    }
 
     $conn->close();
 

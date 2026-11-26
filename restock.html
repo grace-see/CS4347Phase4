@@ -33,15 +33,13 @@
                 dataType: 'json',
                 encode: true,
                 success: function(res) {
-                    console.log(res);
-                    if (res.message == "ok"){
-                        $('#success-message').removeClass("hidden");
-                        $('#success-message').html("Item quantity updated.");
-                        $(this)[0].reset(); // clear data from form after submit
-                    } else{
-                        $('#error-message').removeClass("hidden");
-                        $('#error-message').html(res.message);
-                    }
+                    $('#success-message').removeClass("hidden");
+                    $('#success-message').html("Item quantity updated.");
+                    $(this)[0].reset(); // clear data from form after successful submit
+                },
+                error: function(res) {
+                    $('#error-message').removeClass("hidden");
+                    $('#error-message').html(res.responseJSON.message);
                 }
             })
         })

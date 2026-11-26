@@ -1,5 +1,7 @@
 <?php
 
+    require_once 'exit_with_error_func.php';
+
     $cl_name = $_POST['CL_Name'];
 
     $message = "ok";
@@ -18,7 +20,8 @@
         if ($stmt->bind_param("s", $cl_name)) {
             $stmt->execute();
         } else {
-            $message = "Issue with deleting clothing line.";
+            conn->close();
+            exit_with_error("Issue with deleting clothing line.");
         }
         $stmt->close();
     }

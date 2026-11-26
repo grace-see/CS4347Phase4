@@ -1,5 +1,7 @@
 <?php
 
+    require_once 'exit_with_error_func.php';
+
     $cl_name = $_POST['CL_Name'];
     $type = $_POST['Type'];
     $first_available = $_POST['First_Available'];
@@ -17,6 +19,22 @@
             . mysqli_connect_error());
     }
 
+    if ($stmt = $conn->prepare($check_cl)) {
+        if ($stmt->bind_param("s", $cl_name)) {
+            $stmt->execute();
+            $stmt->store_result();
+            $cl_exists = $stmt->num_rows;
+            if ($cl_exists > 0) {
+                $conn->close();
+                exit_with_error("Clothing Line with the same name already exists.");
+            }
+        } else {
+            $conn->close();
+            exit_with_error("Issue with adding clothing item.");
+        }
+        $stmt->close();
+    }
+
     $sql = "INSERT INTO Clothing_Lien
             VALUES (?, ?, ?, ?, ?, ?, ?)";
 
@@ -24,7 +42,8 @@
         if ($stmt->bind_param("ssssdss", $cl_name, $type, $first_available, $last_available, $sale, $price_tier, $description)) {
             $stmt->execute();
         } else {
-            $message = "Issue with adding clothing line.";
+            $conn->close();
+            exit_with_error("Issue with adding clothing line.");
         }
         $stmt->close();
     }

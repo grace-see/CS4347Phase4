@@ -1,5 +1,7 @@
 <?php
 
+    require_once 'exit_with_error_func.php';
+
     $item_no = $_POST['Item_No'];
 
     $message = "ok";
@@ -19,7 +21,8 @@
         if ($stmt->bind_param("si", $cl_name, $item_no)) {
             $stmt->execute();
         } else {
-            $message = "Issue with deleting clothing item.";
+            $conn->close();
+            exit_with_error("Issue with deleting clothing item.");
         }
         $stmt->close();
     }

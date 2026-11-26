@@ -55,15 +55,13 @@
                 dataType: 'json',
                 encode: true,
                 success: function(res) {
-                    console.log(res);
-                    if (res.message == "ok"){
-                        $('#success-message-add').removeClass("hidden");
-                        $('#success-message-add').html("Clothing line successfully added.");
-                        $(this)[0].reset(); // clear data from form after successful submit
-                    } else{
-                        $('#erro-message-add').removeClass("hidden");
-                        $('#error-message-add').html(res.message);
-                    }
+                    $('#success-message-add').removeClass("hidden");
+                    $('#success-message-add').html("Clothing line successfully added.");
+                    $(this)[0].reset(); // clear data from form after successful submit
+                },
+                error: function(res) {
+                    $('#error-message-add').removeClass("hidden");
+                    $('#error-message-add').html(res.responseJSON.message);
                 }
             })
         })
@@ -77,15 +75,13 @@
                 dataType: 'json',
                 encode: true,
                 success: function(res) {
-                    console.log(res);
-                    if (res.message == "ok"){
-                        $('#success-message-delete').removeClass("hidden");
-                        $('#success-message-delete').html("Clothing line successfully deleted.");
-                        $(this)[0].reset(); // clear data from form after successful submit
-                    } else{
-                        $('#error-message-delete').removeClass("hidden");
-                        $('#error-message-delete').html(res.message);
-                    }
+                    $('#success-message-delete').removeClass("hidden");
+                    $('#success-message-delete').html("Clothing line successfully deleted.");
+                    $(this)[0].reset(); // clear data from form after successful submit
+                },
+                error: function(res) {
+                    $('#error-message-delete').removeClass("hidden");
+                    $('#error-message-delete').html(res.responseJSON.message);
                 }
             })
         })
