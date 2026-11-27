@@ -42,22 +42,29 @@
                 $message = "ok";
                 $stmt->bind_result($item_no, $units_sold);
                 while ($stmt->fetch()) {
-                    $item_details = "SELECT Size, Material, Price, Current_Stock, Date
-                                     FROM Clothing_Item 
+                    $item_details = "SELECT clc.CL_Name, Size, Material, Price, Current_Stock, s.Date
+                                     FROM Clothing_Line
+                                     NATURAL JOIN C_Line_Contains AS clc
+                                     NATURAL JOIN Clothing_Item
                                      NATURAL JOIN Sales_Line
-                                     NATURAL JOIN Sale
-                                     WHERE Item_No='".$item_no."'";
+                                     NATURAL JOIN Sale AS s
+                                     WHERE Item_No=".$item_no."";
                     $result = $conn->query($item_details);
-                    $details = $result->fetch_assoc();
-                    array_push($data, array (
-                        "Rank" => ++$rank,
-                        "Item_No" => $item_no,
-                        "Size" => $details['Size'],
-                        "Material" => $details['Material'],
-                        "Price" => $details['Price'],
-                        "Units_Sold" => $units_sold,
-                        "Current_Stock" => $details['Current_Stock']
-                    ));
+                    while ($result->num_rows > 0 && $row = $result->fetch_assoc()) {
+                        if (array_key_exists($item_no, $data)) {
+                            $data[$item_no]['CL_Name'] = $data[$item_no]['CL_Name'] . ", " . $row['CL_Name'];
+                        } else {
+                            $data[$item_no] = array(
+                                "Rank" => ++$rank,
+                                "CL_Name" => $row['CL_Name'],
+                                "Size" => $row['Size'],
+                                "Material" => $row['Material'],
+                                "Price" => $row['Price'],
+                                "Units_Sold" => $units_sold,
+                                "Current_Stock" => $row['Current_Stock']
+                            );
+                        }
+                    }
                 }
             } else {
                 $message = "No results found.";

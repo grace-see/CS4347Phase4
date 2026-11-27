@@ -69,21 +69,23 @@
         while ($row = $result->fetch_assoc()) {
             $current_status = "In Stock"; 
             if (!is_null($row['Last_Available'])) {
-                //update logic to also include specify that date should be earlier than today ??
                 $current_status = "Discontinued";
             } else if ($row['Current_Stock'] == 0) {
                 $current_status = "Out of Stock";
             }
-            array_push($data, array(
-                "Item_No" => $row['Item_No'],
-                "CL_Name" => $row['CL_Name'],
-                "Gender" => $row['Gender'],
-                "Size" => $row['Size'],
-                "Material" => $row['Material'],
-                "Price" => $row['Price'],
-                "Current_Stock" => $row['Current_Stock'],
-                "Current_Status" => $current_status
-            ));
+            if (array_key_exists($row['Item_No'], $data)) {
+                $data[$row['Item_No']]['CL_Name'] = $data[$row['Item_No']]['CL_Name'] . ", " . $row['CL_Name'];
+            } else {
+                $data[$row['Item_No']] = array(
+                    "CL_Name" => $row['CL_Name'],
+                    "Gender" => $row['Gender'],
+                    "Size" => $row['Size'],
+                    "Material" => $row['Material'],
+                    "Price" => $row['Price'],
+                    "Current_Stock" => $row['Current_Stock'],
+                    "Current_Status" => $current_status
+                );
+            }
         }
         $message = "ok";
     }

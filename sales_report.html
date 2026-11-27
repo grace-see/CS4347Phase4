@@ -27,7 +27,7 @@
 <br>
 <table>
 <thead>
-<tr><th>Rank</th><th>Item No.</th><th>Size</th><th>Material</th><th>Price</th><th>Units Sold</th><th>Current Stock</th></tr>
+<tr><th>Rank</th><th>Item No.</th><th>Clothing Line</th><th>Size</th><th>Material</th><th>Price</th><th>Units Sold</th><th>Current Stock</th></tr>
 </thead>
 <tbody id="results">
 <!-- Rows will be filled with query results in Phase 4 -->
@@ -48,32 +48,36 @@
                 success: function(res) {
                     console.log(res);
                     if (res.message == "ok"){
-                        for (const row of res.data) {
+                        const dataMap = new Map(Object.entries(res.data));
+                        dataMap.forEach(function(value, key) {
                             table_row = document.createElement("tr");
                             rank = document.createElement("td");
-                            rank.textContent = row.Rank;
+                            rank.textContent = value.Rank;
                             table_row.append(rank);
                             item_no = document.createElement("td");
-                            item_no.textContent = row.Item_No;
+                            item_no.textContent = key;
                             table_row.append(item_no);
+                            cl = document.createElement("td");
+                            cl.textContent = value.CL_Name;
+                            table_row.append(cl);
                             size = document.createElement("td");
-                            size.textContent = row.Size;
+                            size.textContent = value.Size;
                             table_row.append(size);
                             material = document.createElement("td");
-                            material.textContent = row.Material;
+                            material.textContent = value.Material;
                             table_row.append(material);
                             price = document.createElement("td");
-                            price.textContent = row.Price;
+                            price.textContent = value.Price;
                             table_row.append(price);
                             units_sold = document.createElement("td");
-                            units_sold.textContent = row.Units_Sold;
+                            units_sold.textContent = value.Units_Sold;
                             table_row.append(units_sold);
                             stock = document.createElement("td");
-                            stock.textContent = row.Current_Stock;
+                            stock.textContent = value.Current_Stock;
                             table_row.append(stock);
 
                             $('#results').append(table_row);
-                        }
+                        });
                     } else{
                         $('#results').html(res.message);
                     }

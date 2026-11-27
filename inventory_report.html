@@ -56,35 +56,36 @@
                 success: function(res) {
                     console.log(res);
                     if (res.message == "ok"){
-                        for (const row of res.data) {
+                        const dataMap = new Map(Object.entries(res.data));
+                        dataMap.forEach(function(value, key) {
                             table_row = document.createElement("tr");
                             item_no = document.createElement("td");
-                            item_no.textContent = row.Item_No;
+                            item_no.textContent = key;
                             table_row.append(item_no);
                             cl = document.createElement("td");
-                            cl.textContent = row.CL_Name;
+                            cl.textContent = value.CL_Name;
                             table_row.append(cl);
                             gender = document.createElement("td");
-                            gender.textContent = row.Gender;
+                            gender.textContent = value.Gender;
                             table_row.append(gender);
                             size = document.createElement("td");
-                            size.textContent = row.Size;
+                            size.textContent = value.Size;
                             table_row.append(size);
                             material = document.createElement("td");
-                            material.textContent = row.Material;
+                            material.textContent = value.Material;
                             table_row.append(material);
                             price = document.createElement("td");
-                            price.textContent = row.Price;
+                            price.textContent = value.Price;
                             table_row.append(price);
                             stock = document.createElement("td");
-                            stock.textContent = row.Current_Stock;
+                            stock.textContent = value.Current_Stock;
                             table_row.append(stock);
                             curr_status = document.createElement("td");
-                            curr_status.textContent = row.Current_Status;
+                            curr_status.textContent = value.Current_Status;
                             table_row.append(curr_status);
 
                             $('#results').append(table_row);
-                        }
+                        });
                     } else{
                         $('#results').html(res.message);
                     }
